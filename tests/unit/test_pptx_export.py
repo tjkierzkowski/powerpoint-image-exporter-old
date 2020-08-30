@@ -79,7 +79,7 @@ def test_if_powerpoint_name_is_safely_created(tmp_path):
 
 def test_presentation_images_directory_is_already_created(custom_path, valid_presentation_name):
     custom_path.mkdir()
-    assert valid_presentation_name.create_directory_for_images(custom_path) is None
+    assert valid_presentation_name.create_directory_for_images(custom_path) is None and custom_path.exists()
 
 
 def test_presentation_images_directory_is_created(custom_path, valid_presentation_name):
@@ -133,4 +133,4 @@ def test_if_all_images_from_an_actual_presentation_are_extracted_to_directory(de
                        for slide in Presentation(real_presentation).slides
                        for shape in slide.shapes
                        if shape.shape_type == MSO_SHAPE_TYPE.PICTURE]
-    assert len(expected_images) == len(result_pictures)
+    assert len(expected_images) == len(result_pictures) and len(expected_images) > 0
