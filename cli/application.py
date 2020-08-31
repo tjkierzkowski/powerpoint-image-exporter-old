@@ -1,4 +1,5 @@
 import argparse
+import logging
 
 from pptx_export.pptx_export import DEFAULT_DIR, PowerPointImageExporter
 
@@ -24,16 +25,15 @@ class CommandLineApplication:
         pptx_exporter = None
         try:
             pptx_exporter = PowerPointImageExporter(arguments.pptx_file_path)
-        except Exception as ve:
-            print(f'An error occurred when verifying your pptx file: \n{ve}')
+        except Exception as ex:
+            logging.exception("An exception occurred when verifying your pptx file", exc_info=True)
         try:
             if arguments.output_directory is not None:
                 pptx_exporter.create_directory_for_images(arguments.output_directory)
-        except Exception as ve:
-            print(f"An error occurred when creating the custom directory: \n{ve}")
+        except Exception as ex:
+            logging.exception(f"An exception occurred when creating the custom directory", exc_info=True)
         try:
             pptx_exporter.copy_images_to_directory()
-        except Exception as ve:
-            print(f"An error occurred when exporting the images: \n")
-            raise ve
+        except Exception as ex:
+            logging.exception("An exception occurred when exporting the images", exc_info=True)
 

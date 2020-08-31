@@ -1,6 +1,7 @@
 """
 export images from a pptx file
 """
+import logging
 from pathlib import Path
 from pptx import Presentation
 from pptx.shapes.autoshape import Shape
@@ -26,9 +27,8 @@ class PowerPointImageExporter:
                              f"was: {''.join(pptx_file_path.suffixes)}")
         self.pptx_file = pptx_file_path
         self.safe_presentation_name = self.__snakecase_the_ppt_name(self.pptx_file.stem)
-        # self.image_directory_path = None
+        self.image_directory_path = None
         self.default_image_path = str(Path('.').resolve() / DEFAULT_DIR)
-        print(f"default:\n{self.default_image_path}\n")
 
     def __snakecase_the_ppt_name(self, filename):
         return filename.replace(" ", "_")
@@ -44,19 +44,18 @@ class PowerPointImageExporter:
             raise ValueError(f"This is not a valid directory path for the images to be placed in: {new_directory}")
         image_directory_path = Path(new_directory)
         if image_directory_path.exists() and image_directory_path.is_dir():
-            print(f"directory '{image_directory_path.resolve()}' already exists... skipping creation\n")
+            logging.info(f"directory '{image_directory_path.resolve()}' already exists... skipping creation")
         else:
             image_directory_path.mkdir()
-            print(f"directory created at {image_directory_path.resolve()}\n")
+            logging.info(f"directory created at {image_directory_path.resolve()}")
         self.image_directory_path = image_directory_path
 
     def copy_images_to_directory(self):
         if self.image_directory_path is None:
-            print('calling default path here')
             self.create_directory_for_images(self.default_image_path)
         elif self.image_directory_path.exists() and self.image_directory_path.is_dir():
             image_directory_contained_files = [images for images in self.image_directory_path.iterdir()]
-            if image_directory_contained_files:
+            if len(image_directory_contained_files) > 0:
                 raise ValueError(
                     f"Will not overwrite the existing image directory at: {self.image_directory_path.resolve()}")
 
