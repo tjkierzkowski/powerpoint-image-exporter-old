@@ -7,6 +7,7 @@ from pptx import Presentation
 from pptx.shapes.autoshape import Shape
 from typing import Tuple, Any
 from pptx.enum.shapes import MSO_SHAPE_TYPE
+from pptx.shapes.placeholder import PlaceholderPicture
 
 DEFAULT_DIR = 'lecture_images'
 
@@ -71,7 +72,8 @@ class PowerPointImageExporter:
                 img_out.write(image_bytes)
 
     def iter_by_shape(self, presentation: Presentation, shape_type: MSO_SHAPE_TYPE) -> Tuple[int, int, Shape]:
-        """Generator function for returning a specific shape_type and it's location back from each slide in the powerpoint """
+        """Generator function for returning a Picture Shape or PlaceholderPicture along with it's location in each
+        slide in the powerpoint """
         if presentation is None:
             raise ValueError(f"Presentation {presentation} cannot be traversed to extract PowerPoint elements")
         if shape_type is None:
@@ -79,8 +81,10 @@ class PowerPointImageExporter:
                              f"examples")
         for slide_number, slide in enumerate(presentation.slides):
             for shape_number, shape in enumerate(slide.shapes):
+                if shape.is_placeholder and isinstance(shape, PlaceholderPicture):
+                    yield slide_number+1, shape_number, shape
                 if shape.shape_type == shape_type:
-                    yield slide_number, shape_number, shape
+                    yield slide_number+1, shape_number, shape
 
     def meaningful_filename(self, pres_name, slide_number, image_number, ext) -> str:
         """generate an image file name in the form of:
