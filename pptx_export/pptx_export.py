@@ -52,6 +52,7 @@ class PowerPointImageExporter:
         self.image_directory_path = image_directory_path
 
     def copy_images_to_directory(self):
+        """Copies all of the images from the powerpoint file into an empty directory.  """
         if self.image_directory_path is None:
             self.create_directory_for_images(self.default_image_path)
         elif self.image_directory_path.exists() and self.image_directory_path.is_dir():
@@ -72,19 +73,19 @@ class PowerPointImageExporter:
                 img_out.write(image_bytes)
 
     def iter_by_shape(self, presentation: Presentation, shape_type: MSO_SHAPE_TYPE) -> Tuple[int, int, Shape]:
-        """Generator function for returning a Picture Shape or PlaceholderPicture along with it's location in each
-        slide in the powerpoint """
+        """Generator function for returning a Picture Shape or PlaceholderPicture along with the slide number and shape
+        number in each slide in the powerpoint """
         if presentation is None:
             raise ValueError(f"Presentation {presentation} cannot be traversed to extract PowerPoint elements")
         if shape_type is None:
             raise ValueError(f"Please provide a valid Shape enum to traverse your presentation, see pptx docs for "
                              f"examples")
         for slide_number, slide in enumerate(presentation.slides):
-            for shape_number, shape in enumerate(slide.shapes):
-                if shape.is_placeholder and isinstance(shape, PlaceholderPicture):
-                    yield slide_number+1, shape_number, shape
-                if shape.shape_type == shape_type:
-                    yield slide_number+1, shape_number, shape
+            image_number = 0
+            for shape in slide.shapes:
+                if (shape.is_placeholder and isinstance(shape, PlaceholderPicture)) or (shape.shape_type == shape_type):
+                    image_number += 1
+                    yield slide_number + 1, image_number, shape
 
     def meaningful_filename(self, pres_name, slide_number, image_number, ext) -> str:
         """generate an image file name in the form of:
