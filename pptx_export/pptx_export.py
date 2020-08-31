@@ -5,7 +5,7 @@ import logging
 from pathlib import Path
 from pptx import Presentation
 from pptx.shapes.autoshape import Shape
-from typing import Tuple, Any
+from typing import Tuple
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.shapes.placeholder import PlaceholderPicture
 
@@ -13,10 +13,7 @@ DEFAULT_DIR = 'lecture_images'
 
 
 class PowerPointImageExporter:
-
-
     """All-in-one class to copy out images from a single PowerPoint file into a directory"""
-
     def __init__(self, pptx_file):
         if pptx_file is None:
             raise ValueError("Please provide a valid PowerPoint file")
