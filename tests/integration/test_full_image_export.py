@@ -1,31 +1,8 @@
 import pytest
-from pathlib import Path
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.shapes.placeholder import PlaceholderPicture
 from pptx_export.pptx_export import PowerPointImageExporter
-
-
-@pytest.fixture
-def default_path(tmp_path: Path) -> Path:
-    custom_path = tmp_path / "lecture_images"
-    return custom_path
-
-
-@pytest.fixture(scope="session")
-def actual_presentation_path():
-    """Load an actual .pptx file with images to test against"""
-    project_name = 'powerpoint_image_exporter'
-    presentation_under_test = 'stub_tester.pptx'
-    project_dir = [project for project in Path.home().rglob(project_name) if project.is_dir()]
-    if not project_dir:
-        raise ValueError(f"Could not find project directory '{project_name}' from your user's home directory")
-    project_root = project_dir[0]
-    presentations = [pres for pres in project_root.rglob(presentation_under_test) if pres.is_file()]
-    if not presentations:
-        raise ValueError(f"Could not find the actual presentation '{presentation_under_test}' within the project "
-                         f"directory {project_root.resolve()}")
-    return str(presentations[0].resolve())
 
 
 def test_powerpoint_images_are_the_same_as_the_number_in_the_file(tmp_path, actual_presentation_path):
