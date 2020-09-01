@@ -15,7 +15,7 @@ def default_path(tmp_path: Path) -> Path:
 @pytest.fixture(scope="session")
 def actual_presentation_path():
     """Load an actual .pptx file with images to test against"""
-    project_name = 'powerpointImageExporter'
+    project_name = 'powerpoint_image_exporter'
     presentation_under_test = 'stub_tester.pptx'
     project_dir = [project for project in Path.home().rglob(project_name) if project.is_dir()]
     if not project_dir:

@@ -1,5 +1,7 @@
 import pytest
 from pathlib import Path
+from pptx.enum.shapes import MSO_SHAPE_TYPE
+from pptx import Presentation
 
 from pptx_export.pptx_export import PowerPointImageExporter
 
@@ -21,10 +23,28 @@ def default_path(tmp_path: Path) -> Path:
     custom_path = tmp_path / "lecture_images"
     return custom_path
 
+@pytest.fixture
+def fake_file():
+    return 'a_valid_file.pptx'
+
 
 @pytest.fixture
-def valid_presentation_name(custom_path):
-    ppt_stub_file = custom_path / 'a_valid_file.pptx'
+def minimal_pres(tmp_path):
+    prs = Presentation()
+    title_slide_layout = prs.slide_layouts[0]
+    slide = prs.slides.add_slide(title_slide_layout)
+    title = slide.shapes.title
+    subtitle = slide.placeholders[1]
+
+    title.text = "Hello, World!"
+    subtitle.text = "python-pptx was here!"
+    minimal_file = tmp_path / 'minimal.pptx'
+    prs.save(minimal_file)
+    return minimal_file
+
+@pytest.fixture
+def valid_presentation_name(custom_path, fake_file):
+    ppt_stub_file = custom_path / fake_file
     pres = PowerPointImageExporter(ppt_stub_file)
     return pres
 
@@ -60,10 +80,10 @@ def test_presentation_images_directory_is_already_created(custom_path, valid_pre
     assert valid_presentation_name.create_directory_for_images(custom_path) is None and custom_path.exists()
 
 
-def test_presentation_images_directory_is_created(custom_path, valid_presentation_name):
-    assert not custom_path.exists()
-    valid_presentation_name.create_directory_for_images(custom_path)
-    assert custom_path.exists()
+def test_presentation_images_directory_is_created(tmp_path, valid_presentation_name):
+    assert len([p for p in tmp_path.iterdir()]) < 1
+    valid_presentation_name.create_directory_for_images(str(tmp_path / "fake_output"))
+    assert len([p for p in tmp_path.iterdir()]) != 0
 
 
 def test_presentation_images_directory_throws_error_without_path(custom_path, valid_presentation_name):
@@ -82,3 +102,36 @@ def test_meaningful_filename_output(valid_presentation_name):
     assert 'None_slide_None_image_None.None' == valid_presentation_name.meaningful_filename(None, None, None, None)
 
 
+def test_if_no_presentation_is_provided_to_iter_by_shape(valid_presentation_name):
+    pres = valid_presentation_name
+    with pytest.raises(ValueError):
+        for _ in pres.iter_by_shape(None, MSO_SHAPE_TYPE):
+            pass
+
+
+def test_if_no_shape_enum_is_provided_to_iter_by_shape(minimal_pres, valid_presentation_name):
+    pres = valid_presentation_name
+    with pytest.raises(ValueError):
+        for item in pres.iter_by_shape(Presentation(minimal_pres), None):
+            print(item)
+
+
+def test_if_image_directory_path_is_none(custom_path, minimal_pres):
+    custom_path.mkdir()
+    new_file = custom_path / 'another_fake.txt'
+    new_file.write_text("stuff")
+    pptx_exporter = PowerPointImageExporter(minimal_pres)
+    pptx_exporter.image_directory_path = None
+    pptx_exporter.copy_images_to_directory()
+    assert pptx_exporter.image_directory_path is not None
+
+
+def test_if_image_directory_path_has_files_in_it(custom_path, minimal_pres):
+    custom_path.mkdir()
+    new_file = custom_path / 'another_fake.jpeg'
+    new_file.write_text("stuff")
+    pptx_exporter = PowerPointImageExporter(minimal_pres)
+    pptx_exporter.image_directory_path = custom_path
+    assert len([p for p in custom_path.iterdir()]) != 0
+    with pytest.raises(ValueError):
+        pptx_exporter.copy_images_to_directory()

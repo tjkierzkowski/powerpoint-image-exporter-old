@@ -3,6 +3,8 @@ export images from a pptx file
 """
 import logging
 from pathlib import Path
+
+# from pip._internal.utils.deprecation import deprecated
 from pptx import Presentation
 from pptx.shapes.autoshape import Shape
 from typing import Tuple
@@ -31,10 +33,6 @@ class PowerPointImageExporter:
     def __snakecase_the_ppt_name(self, filename):
         return filename.replace(" ", "_")
 
-    def __find_desktop_directory_path(self):
-        desktop_paths = [desktop for desktop in Path.home().glob('Desktop') if desktop.is_dir()]
-        return Path(desktop_paths[0])
-
     def create_directory_for_images(self, new_directory=None):
         """Create a directory if none exists and skips creation if the directory provided already exists. If the
         new_directory is set to None a ValueError is thrown. """
@@ -52,9 +50,9 @@ class PowerPointImageExporter:
         """Copies all of the images from the powerpoint file into an empty directory.  """
         if self.image_directory_path is None:
             self.create_directory_for_images(self.default_image_path)
-        elif self.image_directory_path.exists() and self.image_directory_path.is_dir():
+        if self.image_directory_path.exists() and self.image_directory_path.is_dir():
             image_directory_contained_files = [images for images in self.image_directory_path.iterdir()]
-            if len(image_directory_contained_files) > 0:
+            if len(image_directory_contained_files) != 0:
                 raise ValueError(
                     f"Will not overwrite the existing image directory at: {self.image_directory_path.resolve()}")
 
