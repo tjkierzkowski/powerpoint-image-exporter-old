@@ -1,9 +1,8 @@
 import pytest
 from pathlib import Path
-from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx import Presentation
 
-from pptx_export.pptx_export import PowerPointImageExporter
+# import pptx_export.pptx_export
 
 
 @pytest.fixture
@@ -46,6 +45,7 @@ def minimal_pres(tmp_path):
 
 @pytest.fixture
 def valid_presentation_name(custom_path, fake_file):
+    from pptx_export.pptx_export import PowerPointImageExporter
     ppt_stub_file = custom_path / fake_file
     pres = PowerPointImageExporter(ppt_stub_file)
     return pres
