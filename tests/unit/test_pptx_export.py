@@ -74,10 +74,8 @@ def test_if_no_shape_enum_is_provided_to_iter_by_shape(minimal_pres, valid_prese
 
 
 def test_if_image_directory_path_is_none(custom_path, minimal_pres):
-    custom_path.mkdir()
-    new_file = custom_path / 'another_fake.txt'
-    new_file.write_text("stuff")
     pptx_exporter = PowerPointImageExporter(minimal_pres)
+    pptx_exporter.default_image_path = custom_path
     pptx_exporter.image_directory_path = None
     pptx_exporter.copy_images_to_directory()
     assert pptx_exporter.image_directory_path is not None
