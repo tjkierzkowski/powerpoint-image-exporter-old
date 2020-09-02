@@ -1,7 +1,6 @@
-import pytest
-
-from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx import Presentation
+from pptx.enum.shapes import MSO_SHAPE_TYPE
+import pytest
 
 from pptx_export.pptx_export import PowerPointImageExporter
 

@@ -1,7 +1,7 @@
 import argparse
 import logging
 
-from pptx_export.pptx_export import PowerPointImageExporter, DEFAULT_DIR
+from pptx_export.pptx_export import DEFAULT_DIR, PowerPointImageExporter
 
 
 class CommandLineApplication:

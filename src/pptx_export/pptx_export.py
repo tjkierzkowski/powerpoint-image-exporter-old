@@ -3,11 +3,11 @@ export images from a pptx file
 """
 import logging
 from pathlib import Path
+from typing import Tuple
 
 from pptx import Presentation
-from pptx.shapes.autoshape import Shape
-from typing import Tuple
 from pptx.enum.shapes import MSO_SHAPE_TYPE
+from pptx.shapes.autoshape import Shape
 from pptx.shapes.placeholder import PlaceholderPicture
 
 DEFAULT_DIR = "lecture_images"

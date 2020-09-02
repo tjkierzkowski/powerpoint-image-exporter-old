@@ -1,10 +1,10 @@
-import pytest
 from pathlib import Path
 
 from pptx import Presentation
 from pptx.util import Inches
+import pytest
 
-from pptx_export.pptx_export import PowerPointImageExporter, DEFAULT_DIR
+from pptx_export.pptx_export import DEFAULT_DIR, PowerPointImageExporter
 
 
 @pytest.fixture
