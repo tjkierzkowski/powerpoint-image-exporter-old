@@ -56,9 +56,9 @@ def data_directory(pytestconfig):
 
 @pytest.fixture(scope="session")
 def minimal_pres(data_directory):
-    """Generates a PowerPoint presentation based on the random images placed in the data directory.
-    creates placeholder images as well as actual picture shapes. GroupShapes, or images grouped together in a slide
-    are not generated yet.
+    """Generates a PowerPoint presentation based on the random images placed in the
+    data directory.  Creates placeholder images as well as actual picture shapes.
+    GroupShapes, or images grouped together in a slide are not generated yet.
     """
     prs = Presentation()
     title_slide_layout = prs.slide_layouts[0]

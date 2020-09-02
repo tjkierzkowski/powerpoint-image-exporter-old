@@ -20,8 +20,9 @@ class CommandLineApplication:
             "--output-dir",
             dest="output_directory",
             metavar="<output directory>",
-            help="full or relative path of either an empty or to be created output directory for "
-            f"images. Defaults to creating a new local directory '{DEFAULT_DIR}' ",
+            help="full or relative path of either an empty or to be created output "
+            "directory for images. "
+            f"Defaults to creating a new local directory '{DEFAULT_DIR}' ",
             default=DEFAULT_DIR,
         )
 
@@ -39,7 +40,7 @@ class CommandLineApplication:
                 pptx_exporter.create_directory_for_images(arguments.output_directory)
         except Exception:
             logging.exception(
-                f"An exception occurred when creating the custom directory",
+                "An exception occurred when creating the custom directory",
                 exc_info=True,
             )
         try:
