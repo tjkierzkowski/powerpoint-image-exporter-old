@@ -1,7 +1,7 @@
-import pytest
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 from pptx.shapes.placeholder import PlaceholderPicture
+
 from pptx_export.pptx_export import PowerPointImageExporter
 
 

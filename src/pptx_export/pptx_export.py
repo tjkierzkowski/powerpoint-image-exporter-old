@@ -31,7 +31,7 @@ class PowerPointImageExporter:
         self.pptx_file = pptx_file_path
         self.safe_presentation_name = self.__snakecase_the_ppt_name(self.pptx_file.stem)
         self.image_directory_path = None
-        self.default_image_path = str(Path(".").resolve() / DEFAULT_DIR)
+        self.default_image_path = str(Path("").resolve() / DEFAULT_DIR)
 
     def __snakecase_the_ppt_name(self, filename):
         return filename.replace(" ", "_")

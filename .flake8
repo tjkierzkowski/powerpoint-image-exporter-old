@@ -3,3 +3,4 @@ select = BLK,C,E,F,W
 ignore = E203,W503
 max-line-length = 88
 max-complexity = 10
+application-import-names = pptx_export,commandline,tests

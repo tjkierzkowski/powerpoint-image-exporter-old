@@ -1,5 +1,6 @@
 import pytest
 from pathlib import Path
+
 from pptx import Presentation
 from pptx.util import Inches
 
@@ -17,21 +18,17 @@ def custom_path(tmp_path: Path) -> Path:
     custom_path = tmp_path / "presentation_images"
     return custom_path
 
-@pytest.fixture
-def default_path(tmp_path: Path) -> Path:
-    custom_path = tmp_path / "lecture_images"
-    return custom_path
 
 @pytest.fixture(scope="session")
 def default_path_session(tmp_path_factory) -> Path:
     base = tmp_path_factory.mktemp()
-    custom_path = base / "lecture_images"
+    custom_path = base / DEFAULT_DIR
     return custom_path
 
 
 @pytest.fixture
 def fake_file():
-    return 'a_valid_file.pptx'
+    return "a_valid_file.pptx"
 
 
 @pytest.fixture
@@ -42,6 +39,7 @@ def valid_presentation_name(custom_path, fake_file):
 
 
 # Integration specific fixtures below
+
 
 @pytest.fixture
 def default_path(tmp_path: Path) -> Path:
@@ -71,11 +69,15 @@ def minimal_pres(data_directory):
     title.text = "Fake Presentation"
     subtitle.text = "Another presentation brought to you by python-pptx!"
     # Add the images from the data directory into a presentation
-    legal_image_types = {'.jpg', '.jpeg', '.gif', '.tiff', '.png'}
+    legal_image_types = {".jpg", ".jpeg", ".gif", ".tiff", ".png"}
     # TODO add images as groups in here
     image_types = 2
     for image_num, image_file in enumerate(data_directory.iterdir()):
-        if image_file and image_file.is_file() and image_file.suffix in legal_image_types:
+        if (
+            image_file
+            and image_file.is_file()
+            and image_file.suffix in legal_image_types
+        ):
             image_file_path = str(image_file.resolve())
             if image_num % image_types == 0:
                 # for adding a picture per slide as a shape
@@ -88,10 +90,7 @@ def minimal_pres(data_directory):
                 placeholder = slide.placeholders[1]
                 placeholder.insert_picture(image_file_path)
 
-    minimal_file = data_directory / 'minimal.pptx'
+    minimal_file = data_directory / "minimal.pptx"
     prs.save(str(minimal_file.resolve()))
     yield minimal_file
     minimal_file.unlink(missing_ok=True)
-
-
-

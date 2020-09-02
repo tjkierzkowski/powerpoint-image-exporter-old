@@ -1,4 +1,4 @@
-from cli.application import CommandLineApplication
+from commandline.application import CommandLineApplication
 
 
 # TODO bring the cli application in here
