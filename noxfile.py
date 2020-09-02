@@ -4,8 +4,10 @@ from typing import Any
 import nox
 from nox.sessions import Session
 
-locations = "src", "tests", "noxfile.py", "pptx_image_exporter.py"
-nox.options.sessions = "lint", "tests"
+
+package = "pptx_image_exporter"
+locations = "src", "tests", "noxfile.py"
+nox.options.sessions = "lint", "safety", "tests"
 
 
 def install_with_constraints(session: Session, *args: str, **kwargs: Any) -> None:
@@ -36,19 +38,22 @@ def install_with_constraints(session: Session, *args: str, **kwargs: Any) -> Non
         session.install(f"--constraint={requirements.name}", *args, **kwargs)
 
 
-@nox.session(python=["3.8", "3.7", "3.6"])
+@nox.session(python=["3.8", "3.7"])
 def tests(session):
+    args = session.posargs or ["--cov"]
     session.run("poetry", "install", "--no-dev", external=True)
     install_with_constraints(
-        session, "coverage[toml]", "pytest", "pytest-cov", "pytest-mock"
+        session, "coverage[toml]", "pytest", "pytest-cov", "pytest-mock", "python-pptx"
+        # session, "coverage[toml]", "pytest", "pytest-cov", "pytest-mock"
     )
-    session.run("pytest", "--cov")
+    session.run("pytest", *args)
 
 
 @nox.session(python=["3.8", "3.7"])
 def lint(session):
     args = session.posargs or locations
-    session.install(
+    install_with_constraints(
+        session,
         "flake8",
         "flake8-bandit",
         "flake8-black",
@@ -61,5 +66,22 @@ def lint(session):
 @nox.session(python="3.8")
 def black(session):
     args = session.posargs or locations
-    session.install("black")
+    install_with_constraints(session, "black")
     session.run("black", *args)
+
+
+@nox.session(python="3.8")
+def safety(session: Session) -> None:
+    """Scan dependencies for insecure packages."""
+    with tempfile.NamedTemporaryFile() as requirements:
+        session.run(
+            "poetry",
+            "export",
+            "--dev",
+            "--format=requirements.txt",
+            "--without-hashes",
+            f"--output={requirements.name}",
+            external=True,
+        )
+        install_with_constraints(session, "safety")
+        session.run("safety", "check", f"--file={requirements.name}", "--full-report")
