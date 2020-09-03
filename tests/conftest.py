@@ -4,7 +4,8 @@ from pptx import Presentation
 from pptx.util import Inches
 import pytest
 
-from pptx_export.pptx_export import DEFAULT_DIR, PowerPointImageExporter
+# from pptx_export.pptx_export import DEFAULT_DIR, PowerPointImageExporter
+# from pptx_export import pptx_export
 
 
 @pytest.fixture
@@ -21,8 +22,11 @@ def custom_path(tmp_path: Path) -> Path:
 
 @pytest.fixture(scope="session")
 def default_path_session(tmp_path_factory) -> Path:
+    from pptx_export.pptx_export import DEFAULT_DIR
+
     base = tmp_path_factory.mktemp()
     custom_path = base / DEFAULT_DIR
+    # custom_path = base / pptx_export.DEFAULT_DIR
     return custom_path
 
 
@@ -33,8 +37,11 @@ def fake_file():
 
 @pytest.fixture
 def valid_presentation_name(custom_path, fake_file):
+    from pptx_export.pptx_export import PowerPointImageExporter
+
     ppt_stub_file = custom_path / fake_file
     pres = PowerPointImageExporter(ppt_stub_file)
+    # pres = pptx_export.PowerPointImageExporter(ppt_stub_file)
     return pres
 
 
@@ -43,7 +50,10 @@ def valid_presentation_name(custom_path, fake_file):
 
 @pytest.fixture
 def default_path(tmp_path: Path) -> Path:
+    from pptx_export.pptx_export import DEFAULT_DIR
+
     current_default = tmp_path / DEFAULT_DIR
+    # current_default = tmp_path / pptx_export.DEFAULT_DIR
     return current_default
 
 
@@ -60,6 +70,7 @@ def minimal_pres(data_directory):
     data directory.  Creates placeholder images as well as actual picture shapes.
     GroupShapes, or images grouped together in a slide are not generated yet.
     """
+
     prs = Presentation()
     title_slide_layout = prs.slide_layouts[0]
     slide = prs.slides.add_slide(title_slide_layout)

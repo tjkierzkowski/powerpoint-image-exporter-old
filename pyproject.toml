@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "powerpoint-image-exporter"
 version = "0.1.0"
-description = ""
+description = "Export images from a pptx file into an empty directory"
 authors = ["Tom Kierzkowski <52253+tjkierzkowski@users.noreply.github.com>"]
 
 [tool.poetry.dependencies]
@@ -21,10 +21,9 @@ flake8-import-order = "^0.18.1"
 flake8-bandit = "^2.1.2"
 flake8-bugbear = "^20.1.4"
 safety = "^1.9.0"
-python-pptx = "^0.6.18"
 
 [tool.coverage.paths]
-source = ["src", "*site/packages"]
+source = ["src"]
 
 [tool.coverage.run]
 branch = true
