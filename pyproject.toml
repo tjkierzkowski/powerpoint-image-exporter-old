@@ -26,8 +26,9 @@ safety = "^1.9.0"
 source = ["src"]
 
 [tool.coverage.run]
+debug = ["config","sys","premain"]
 branch = true
-source = ["pptx_export", "cli", "pptx_image_exporter"]
+source = ["commandline","pptx_export","pptx_image_exporter"]
 
 [tool.coverage.report]
 show_missing = true
