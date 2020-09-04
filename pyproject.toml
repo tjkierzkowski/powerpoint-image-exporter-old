@@ -3,6 +3,7 @@ name = "powerpoint-image-exporter"
 version = "0.1.0"
 description = "Export images from a pptx file into an empty directory"
 authors = ["Tom Kierzkowski <52253+tjkierzkowski@users.noreply.github.com>"]
+license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.8"
