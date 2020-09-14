@@ -81,7 +81,6 @@ def minimal_pres(data_directory):
     subtitle.text = "Another presentation brought to you by python-pptx!"
     # Add the images from the data directory into a presentation
     legal_image_types = {".jpg", ".jpeg", ".gif", ".tiff", ".png"}
-    # TODO add images as groups in here
     image_types = 2
     for image_num, image_file in enumerate(data_directory.iterdir()):
         if (
