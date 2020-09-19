@@ -5,7 +5,7 @@ import nox
 from nox.sessions import Session
 
 
-package = "pptx_image_exporter"
+package = "powerpoint_image_exporter"
 nox.options.sessions = "lint", "safety", "tests"
 locations = "src", "tests", "noxfile.py"
 
