@@ -9,6 +9,7 @@ license = "MIT"
 python = "^3.8"
 importlib-metadata = "^1.7.0"
 python-pptx = "^0.6.18"
+click = "^7.1.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0.1"
@@ -24,7 +25,7 @@ flake8-bugbear = "^20.1.4"
 safety = "^1.9.0"
 
 [tool.poetry.scripts]
-powerpoint-image-exporter = "pptx_image_exporter.pptx_image_exporter:main"
+powerpoint-image-exporter = "powerpoint_image_exporter.powerpoint_image_exporter:main"
 
 [tool.coverage.paths]
 source = ["src"]
@@ -32,7 +33,7 @@ source = ["src"]
 [tool.coverage.run]
 debug = ["config","sys","premain"]
 branch = true
-source = ["commandline","pptx_export","pptx_image_exporter"]
+source = ["src"]
 
 [tool.coverage.report]
 show_missing = true
