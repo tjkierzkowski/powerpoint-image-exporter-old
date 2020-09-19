@@ -2,37 +2,31 @@ from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 import pytest
 
-from pptx_export import pptx_export
-
-# from pptx_export.pptx_export import PowerPointImageExporter
+from pptx_export.pptx_export import PowerPointImageExporter
 
 
 def test_if_file_is_none():
     with pytest.raises(ValueError):
-        pptx_export.PowerPointImageExporter(None)
-        # PowerPointImageExporter(None)
+        PowerPointImageExporter(None)
 
 
 def test_if_file_is_not_a_file(fake_path):
     fake_path.mkdir()
     with pytest.raises(ValueError):
-        pptx_export.PowerPointImageExporter(fake_path)
-        # PowerPointImageExporter(fake_path)
+        PowerPointImageExporter(fake_path)
 
 
 def test_if_file_is_not_pptx(fake_path):
     fake_path.mkdir()
     not_pptx_file = fake_path / "fakefile.ppt"
     with pytest.raises(ValueError):
-        pptx_export.PowerPointImageExporter(not_pptx_file)
-        # PowerPointImageExporter(not_pptx_file)
+        PowerPointImageExporter(not_pptx_file)
 
 
 def test_if_powerpoint_name_is_safely_created(tmp_path):
     expected = "Fall_2020_Block_1_Lab_Review_w_labels_1-3_and_osteo-1"
     pptx_file = tmp_path / "Fall 2020 Block 1 Lab Review w labels 1-3 and osteo-1.pptx"
-    ppie = pptx_export.PowerPointImageExporter(pptx_file)
-    # ppie = PowerPointImageExporter(pptx_file)
+    ppie = PowerPointImageExporter(pptx_file)
     actual = ppie.safe_presentation_name
     assert expected == actual
 
@@ -93,8 +87,7 @@ def test_if_no_shape_enum_is_provided_to_iter_by_shape(
 
 
 def test_if_image_directory_path_is_none(custom_path, minimal_pres):
-    pptx_exporter = pptx_export.PowerPointImageExporter(minimal_pres)
-    # pptx_exporter = PowerPointImageExporter(minimal_pres)
+    pptx_exporter = PowerPointImageExporter(minimal_pres)
     pptx_exporter.default_image_path = custom_path
     pptx_exporter.image_directory_path = None
     pptx_exporter.copy_images_to_directory()
@@ -105,8 +98,7 @@ def test_if_image_directory_path_has_files_in_it(custom_path, minimal_pres):
     custom_path.mkdir()
     new_file = custom_path / "another_fake.jpeg"
     new_file.write_text("stuff")
-    pptx_exporter = pptx_export.PowerPointImageExporter(minimal_pres)
-    # pptx_exporter = PowerPointImageExporter(minimal_pres)
+    pptx_exporter = PowerPointImageExporter(minimal_pres)
     pptx_exporter.image_directory_path = custom_path
     assert len([p for p in custom_path.iterdir()]) != 0
     with pytest.raises(ValueError):
