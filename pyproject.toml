@@ -27,7 +27,7 @@ safety = "^1.9.0"
 powerpoint-image-exporter = "powerpoint_image_exporter.powerpoint_image_exporter:main"
 
 [tool.coverage.paths]
-source = ["src"]
+source = ["src","*/site-packages"]
 
 [tool.coverage.run]
 debug = ["config","sys","premain"]
